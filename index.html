@@ -15,7 +15,49 @@
   <script type="text/javascript" src="helpers/renderers.lib.js"></script>
   <script type="text/javascript">
 
-// Welcome to TorontoJS Workshop :) 
+    class Neuron {
+      constructor(weights = [], bias = 0, activateFn) {
+        this.weights = weights;
+        this.bias = bias;
+        this.activateFn = activateFn;
+      }
+
+      sum(inputs = []) {
+        let buffer = [];
+        let output = 0;
+
+        for (let i in inputs) {
+          buffer[i] = inputs[i] * this.weights[i];
+        }
+
+        for (let b in buffer) {
+          output += buffer[b];
+        }
+
+        return output + this.bias;
+      }
+
+      fire (inputs = []) {
+        let output = 0;
+        output = this.sum(inputs);
+        let result = this.activateFn(output);
+        return result;
+      }
+    }
+
+
+    const w = [1];
+
+    const bias = 4;
+
+    // Sigmoin function: https://en.wikipedia.org/wiki/Sigmoid_function
+
+
+    const neuron = new Neuron(w, bias, Math.sigmoid);
+
+    const x = [2];
+
+    console.log('Run neuron against input', neuron.fire(x));
 
   </script>
 </body>
