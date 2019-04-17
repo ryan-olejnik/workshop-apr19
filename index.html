@@ -62,7 +62,6 @@
     class Network {
       biases = [];
       weights = [];
-
       hidden = [];
       output;
 
@@ -76,6 +75,54 @@
 
         this.output = new Neuron([this.weights[W5], this.weights[W6]], this.biases[O1], activatorFn);
 
+      }
+
+      train (dataa = [], answers = [], iterations = 1000, rate = 0.1) {
+        for (let i; i < iterations; i++) {
+          for (let d in data) {
+            let h1Sum = this.hidden[H1].sum(data[d]);
+            let h1 = this.hidden[H1].activateFn(h1Sum);
+
+            let h2Sum = this.hidden[H2].sum(data[d]);
+            let h2 = this.hidden[H2].activateFn(h2Sum);
+
+            let o1Sum = this.output.sum([h1, h2]);
+            let o1 = this.output.activateFn(o1Sum);
+            
+            let pred = o1;
+
+            let pLp01 = -2 * (answers[d] - pred);
+
+            let p01pW6 = h1 * Math.derivSigmoid(o1Sum);
+            let p01pW5 = h2 * Math.derivSigmoid(o1Sum);
+
+            let p01pB3 = h2 * Math.derivSigmoid(o1Sum);
+
+            let p01pH1 = this.weights[W5] * Math.derivSigmoid(o1Sum);
+            let p01pH2 = this.weights[W6] * Math.derivSigmoid(o1Sum);
+
+            let pH1pW1 = data[d][I1] * Math.derivSigmoid(h1Sum);
+            let pH1pW2 = data[d][I2] * Math.derivSigmoid(h1Sum);
+
+            let pH1pB1 = Math.derivSigmoid(h1Sum);
+
+            let pH2pW3 = data[d][I1] * Math.derivSigmoid(h2Sum);
+            let pH2pW4 = data[d][I2] * Math.derivSigmoid(h2Sum);
+
+            let pH2pB2 = Math.derivSigmoid(h2Sum);
+
+            this.weights[W1] -= rate * pLp01 * p01pH1 * pH1pW1;
+            this.weights[W2] -= rate * pLp01 * p01pH1 * pH2pW3;
+
+            this.weights[W3] -= rate * pLp01 * p01pH2 * pH2pW3;
+            this.weights[W4] -= rate * pLp01 * p01pH2 * pH2pW3;
+
+            
+
+
+
+          }
+        }
       }
 
       query (inputs = []) {
