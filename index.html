@@ -45,14 +45,54 @@
       }
     }
 
+    const H1 = 0;
+    const H2 = 1;
+    const O1 = 2;
+
+    const W1 = 0;
+    const W2 = 1;
+    const W3 = 2;
+    const W4 = 3;
+    const W5 = 4;
+    const W6 = 5;
+
+    const I1 = 0;
+    const I2 = 1;
+
+    class Network {
+      biases = [];
+      weights = [];
+
+      hidden = [];
+      output;
+
+      constructor(weights = [], biases = [], activatorFn, ) {
+        this.weights = weights;
+        this.biases = biases;
+        this.hidden = [
+          new Neuron([this.weights[W1], this.weights[W2]], this.biases[H1], activatorFn),
+          new Neuron([this.weights[W3], this.weights[W4]], this.biases[H2], activatorFn)
+        ];
+
+        this.output = new Neuron([this.weights[W5], this.weights[W6]], this.biases[O1], activatorFn);
+
+      }
+
+      query (inputs = []) {
+        let params = []; // these will be the inputs for the output neuron
+        for (let h in this.hidden) {
+          params.push(this.hidden[h].fire(inputs));
+        }
+
+        return this.output.fire(params);
+      }
+    }
 
     const w = [1];
 
     const bias = 4;
 
     // Sigmoin function: https://en.wikipedia.org/wiki/Sigmoid_function
-
-
     const neuron = new Neuron(w, bias, Math.sigmoid);
 
     const x = [2];
