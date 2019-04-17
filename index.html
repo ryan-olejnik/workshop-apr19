@@ -88,16 +88,16 @@
       }
     }
 
-    const w = [1];
+    const w = [0,1,0,1,0,1];
 
-    const bias = 4;
+    const bias = [0,0,0];
 
     // Sigmoin function: https://en.wikipedia.org/wiki/Sigmoid_function
-    const neuron = new Neuron(w, bias, Math.sigmoid);
+    const nn = new Network(w, bias, Math.sigmoid);
 
-    const x = [2];
+    const x = [2,3];
 
-    console.log('Run neuron against input', neuron.fire(x));
+    console.log('Run neural network against input', nn.query(x));
 
   </script>
 </body>
